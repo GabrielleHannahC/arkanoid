@@ -22,7 +22,9 @@ namespace Arkanoid
         Texture2D gameBackground;
         Rectangle backgroundRectangle;
 
-        MouseState prevMouseState; //Mouse state from previous frame stored here
+        ControlsManager controls;
+
+        
 
         Player player; 
 
@@ -49,6 +51,7 @@ namespace Arkanoid
                 Window.ClientBounds.Width,
                 Window.ClientBounds.Height);
 
+            controls = new ControlsManager(this);
             base.Initialize();
         }
 
@@ -82,16 +85,7 @@ namespace Arkanoid
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-            KeyboardState keyboardsState = Keyboard.GetState();
-
-            if (keyboardsState.IsKeyDown(Keys.Left))
-                player.position.X -= player.Speed;
-            else if (keyboardsState.IsKeyDown(Keys.Right))
-                player.position.X += player.Speed;
+            controls.Update();
 
             base.Update(gameTime);
         }
@@ -118,6 +112,11 @@ namespace Arkanoid
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public Player Player
+        {
+            get { return player; }
         }
     }
 }
