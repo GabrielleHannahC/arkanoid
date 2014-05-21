@@ -19,10 +19,18 @@ namespace Arkanoid
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D gameBackground;
+        Rectangle backgroundRectangle;
+
+        MouseState prevMouseState; //Mouse state from previous frame stored here
+
+        Player player; 
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -33,7 +41,13 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            player = new Player(
+                (Window.ClientBounds.Width / 2) - (Player.width / 2),
+                (Window.ClientBounds.Height / 2) - (Player.height / 2));
+
+            backgroundRectangle = new Rectangle(0, 0,
+                Window.ClientBounds.Width,
+                Window.ClientBounds.Height);
 
             base.Initialize();
         }
@@ -47,7 +61,9 @@ namespace Arkanoid
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            gameBackground = Content.Load<Texture2D>(@"Images/background");
+
+            player.Sprite = Content.Load<Texture2D>(@"Images/player");
         }
 
         /// <summary>
@@ -70,7 +86,12 @@ namespace Arkanoid
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            KeyboardState keyboardsState = Keyboard.GetState();
+
+            if (keyboardsState.IsKeyDown(Keys.Left))
+                player.position.X -= player.Speed;
+            else if (keyboardsState.IsKeyDown(Keys.Right))
+                player.position.X += player.Speed;
 
             base.Update(gameTime);
         }
@@ -83,7 +104,18 @@ namespace Arkanoid
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            //Draw Background
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Opaque, SamplerState.LinearWrap,
+                DepthStencilState.Default, RasterizerState.CullNone);
+            spriteBatch.Draw(gameBackground, Vector2.Zero, backgroundRectangle, Color.White);
+            spriteBatch.End();
+
+            //Other stuff
+            spriteBatch.Begin();
+            spriteBatch.Draw(
+                player.Sprite, player.position, player.Rectangle, Color.White, 
+                0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
