@@ -14,29 +14,24 @@ namespace Arkanoid
         //and thus the general dimensions of the player
         public const int width = 32;
         public const int height = 8;
-        const float speed = 2;
+        public const float speed = 2;
 
         int score = 0;
         int lives = 3;
 
-        float posX;
-        float posY;
-
 
         Game1 game;
-        //public Vector2 position;
+        public Vector2 position;
 
         private Texture2D sprite;
         private Rectangle rectangle;
 
         
 
-        public Player(Game1 game, int x, int y)
+        public Player(Game1 game, float x, float y)
         {
             this.game = game;
-            posX = x;
-            posY = y;
-            //position = new Vector2(x, y);
+            position = new Vector2(x, y);
 
             rectangle = new Rectangle(0, 0,
                 width,
@@ -54,30 +49,35 @@ namespace Arkanoid
             get { return speed; }
         }
 
-        //public vector2 position
-        //{
-        //    get { return position; }
-        //    set { position = value; }
-        //}
-
-        public float PosX
+        public Vector2 Position
         {
-            get { return posX; }
+            get { return position; }
             set
             {
-                System.Diagnostics.Debug.WriteLine("Setting PosX");
-                posX = value;
-                //Check that we dont move out of the window
-                if (posX < 0) posX = 0;
-                if (posX > game.Window.ClientBounds.Width - width)
-                    posX = game.Window.ClientBounds.Width - width;
+                position = value;
+                checkIfOutOfBounds();
             }
         }
 
-        public float PosY
+        public void moveOnXAxis(float distance)
         {
-            get { return posY; }
-            set { posY = value; }
+            position.X += distance;
+            checkIfOutOfBounds();
+        }
+
+        private void checkIfOutOfBounds()
+        {
+            //Check that we dont move out of the window
+            if (position.X < 0)
+                position.X = 0;
+            else if (position.X > game.Window.ClientBounds.Width - width)
+                position.X = game.Window.ClientBounds.Width - width;
+        }
+
+        public Vector2 GetBallStartPos()
+        {
+            return new Vector2(position.X + width / 2,
+                position.Y);
         }
 
 

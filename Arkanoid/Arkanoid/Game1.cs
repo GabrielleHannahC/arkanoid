@@ -106,7 +106,7 @@ namespace Arkanoid
             //Other stuff
             spriteBatch.Begin();
             spriteBatch.Draw(
-                player.Sprite, new Vector2(player.PosX, player.PosY), player.Rectangle, Color.White, 
+                player.Sprite, player.Position, player.Rectangle, Color.White, 
                 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.End();
 
