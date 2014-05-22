@@ -52,32 +52,48 @@ namespace Arkanoid
         public Vector2 Position
         {
             get { return position; }
-            set
-            {
-                position = value;
-                checkIfOutOfBounds();
-            }
         }
 
-        public void moveOnXAxis(float distance)
+        public void SetPos(float x, float y)
+        {
+            position.X = x;
+            position.Y = y;
+            IsOutOfBounds();
+            if (!game.Ball.Launched)
+                game.Ball.Position = GetBallStartingPos();
+        }
+        public void MoveOnXAxis(float distance)
         {
             position.X += distance;
-            checkIfOutOfBounds();
+            if (IsOutOfBounds()) return; //return so we wont move the ball if 
+
+            if (!game.Ball.Launched)
+                game.Ball.MoveOnXAxis(distance);
         }
 
-        private void checkIfOutOfBounds()
+        /** Returns whether or not we're touching a window wall. Also 
+         * ensures we dont go through the wall */
+        private bool IsOutOfBounds()
         {
             //Check that we dont move out of the window
             if (position.X < 0)
+            {
                 position.X = 0;
+                return true;
+            }
             else if (position.X > game.Window.ClientBounds.Width - width)
+            {
                 position.X = game.Window.ClientBounds.Width - width;
+                return true;
+            }
+            return false;
         }
-
-        public Vector2 GetBallStartPos()
+        /** Returns the Coordinates where the ball would be positioned
+         * at the center of the plaeyer's racket. */
+        public Vector2 GetBallStartingPos()
         {
-            return new Vector2(position.X + width / 2,
-                position.Y);
+            return new Vector2(position.X + (width / 2) - (Ball.width / 2),
+                position.Y - Ball.height);
         }
 
 

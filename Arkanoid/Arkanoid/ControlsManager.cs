@@ -15,6 +15,9 @@ namespace Arkanoid
         public ControlsManager(Game1 g)
         {
             game = g;
+            Mouse.SetPosition(
+                (int) game.Player.Position.X, 
+                (int) game.Player.Position.Y);
         }
 
         public void Update()
@@ -28,16 +31,25 @@ namespace Arkanoid
             //Move mouse along with the player
             if (keyboardsState.GetPressedKeys().Length != 0)
             {
-
+                //Movement
                 if (keyboardsState.IsKeyDown(Keys.Left))
                 {
-                    game.Player.moveOnXAxis(-Player.speed);
+                    game.Player.MoveOnXAxis(-Player.speed);
                 }
                 else if (keyboardsState.IsKeyDown(Keys.Right))
-                    game.Player.moveOnXAxis(Player.speed);
+                    game.Player.MoveOnXAxis(Player.speed);
 
                 Mouse.SetPosition( (int) game.Player.Position.X,
                     (int) game.Player.Position.Y);
+
+
+                //Ball launch
+                if (keyboardsState.IsKeyDown(Keys.Space))
+                {
+                    game.Ball.Launch();
+                }
+
+
             }
 
             //Mouse controls
@@ -45,11 +57,15 @@ namespace Arkanoid
             if (mouseState.X != prevMouseState.X ||
                 mouseState.Y != prevMouseState.Y)
             { 
-               game.Player.Position = new Vector2(
-                   mouseState.X, game.Player.Position.Y);
-
+               game.Player.SetPos(mouseState.X, game.Player.Position.Y);
             prevMouseState = mouseState;
             }
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                game.Ball.Launch();
+            }
+
         }
     }
 }

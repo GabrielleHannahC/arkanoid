@@ -26,7 +26,8 @@ namespace Arkanoid
 
         
 
-        Player player; 
+        Player player;
+        Ball ball;
 
         public Game1()
         {
@@ -44,7 +45,9 @@ namespace Arkanoid
         {
             player = new Player(this,
                 (Window.ClientBounds.Width / 2) - (Player.width / 2),
-                (Window.ClientBounds.Height / 2) - (Player.height / 2));
+                (Window.ClientBounds.Height - 50) - (Player.height / 2));
+
+            ball = new Ball(this, player.GetBallStartingPos());
 
             backgroundRectangle = new Rectangle(0, 0,
                 Window.ClientBounds.Width,
@@ -66,6 +69,7 @@ namespace Arkanoid
             gameBackground = Content.Load<Texture2D>(@"Images/background");
 
             player.Sprite = Content.Load<Texture2D>(@"Images/player");
+            ball.Sprite = Content.Load<Texture2D>(@"Images/ball");
         }
 
         /// <summary>
@@ -85,7 +89,7 @@ namespace Arkanoid
         protected override void Update(GameTime gameTime)
         {
             controls.Update();
-
+            if (ball.Launched) ball.Move();
             base.Update(gameTime);
         }
 
@@ -108,6 +112,9 @@ namespace Arkanoid
             spriteBatch.Draw(
                 player.Sprite, player.Position, player.Rectangle, Color.White, 
                 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(ball.Sprite, ball.Position, Color.White);
+
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -116,6 +123,11 @@ namespace Arkanoid
         public Player Player
         {
             get { return player; }
+        }
+
+        public Ball Ball
+        {
+            get { return ball; }
         }
     }
 }
