@@ -27,22 +27,25 @@ namespace Arkanoid
             KeyboardState keyboardsState = Keyboard.GetState();
 
             if (keyboardsState.IsKeyDown(Keys.Left))
-                game.Player.position.X -= game.Player.Speed;
+            {
+                game.Player.PosX -= game.Player.Speed;
+                System.Diagnostics.Debug.WriteLine("Left");
+            }
             else if (keyboardsState.IsKeyDown(Keys.Right))
-                game.Player.position.X += game.Player.Speed;
+                game.Player.PosX += game.Player.Speed;
 
             //Move mouse along with the player
             if (keyboardsState.GetPressedKeys().Length != 0)
             {
-                Mouse.SetPosition((int)game.Player.position.X,
-                    (int)game.Player.position.Y);
+                Mouse.SetPosition((int)game.Player.PosX,
+                    (int)game.Player.PosY);
             }
 
             //Mouse controls
             MouseState mouseState = Mouse.GetState();
             if (mouseState.X != prevMouseState.X ||
             mouseState.Y != prevMouseState.Y)
-               game.Player.position.X = mouseState.X;
+               game.Player.PosX = mouseState.X;
             prevMouseState = mouseState;
         }
     }

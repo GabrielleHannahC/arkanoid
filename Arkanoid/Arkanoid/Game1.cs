@@ -32,7 +32,6 @@ namespace Arkanoid
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
-            player = new Player(
+            player = new Player(this,
                 (Window.ClientBounds.Width / 2) - (Player.width / 2),
                 (Window.ClientBounds.Height / 2) - (Player.height / 2));
 
@@ -107,7 +106,7 @@ namespace Arkanoid
             //Other stuff
             spriteBatch.Begin();
             spriteBatch.Draw(
-                player.Sprite, player.position, player.Rectangle, Color.White, 
+                player.Sprite, new Vector2(player.PosX, player.PosY), player.Rectangle, Color.White, 
                 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.End();
 

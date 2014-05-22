@@ -19,16 +19,24 @@ namespace Arkanoid
         int score = 0;
         int lives = 3;
 
-        public Vector2 position;
+        float posX;
+        float posY;
+
+
+        Game1 game;
+        //public Vector2 position;
 
         private Texture2D sprite;
         private Rectangle rectangle;
 
         
 
-        public Player(int x, int y)
+        public Player(Game1 game, int x, int y)
         {
-            position = new Vector2(x, y);
+            this.game = game;
+            posX = x;
+            posY = y;
+            //position = new Vector2(x, y);
 
             rectangle = new Rectangle(0, 0,
                 width,
@@ -45,6 +53,33 @@ namespace Arkanoid
         {
             get { return speed; }
         }
+
+        //public vector2 position
+        //{
+        //    get { return position; }
+        //    set { position = value; }
+        //}
+
+        public float PosX
+        {
+            get { return posX; }
+            set
+            {
+                System.Diagnostics.Debug.WriteLine("Setting PosX");
+                posX = value;
+                //Check that we dont move out of the window
+                if (posX < 0) posX = 0;
+                if (posX > game.Window.ClientBounds.Width - width)
+                    posX = game.Window.ClientBounds.Width - width;
+            }
+        }
+
+        public float PosY
+        {
+            get { return posY; }
+            set { posY = value; }
+        }
+
 
         public Texture2D Sprite
         {
