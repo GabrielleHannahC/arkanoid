@@ -19,7 +19,8 @@ namespace Arkanoid
         Vector2 position;
         Game1 game;
 
-        private Boolean launched;
+        private bool launched;
+        private bool falling;
         private Texture2D sprite;
         private Rectangle rectangle;
 
@@ -27,6 +28,9 @@ namespace Arkanoid
         {
             this.game = game;
             this.position = position;
+            
+            falling = false;
+            launched = false;
 
             rectangle = new Rectangle(0, 0,
                 width,
@@ -61,10 +65,27 @@ namespace Arkanoid
                 position.Y = 0;
                 curYSpeed = -curYSpeed;
             }
+
+            if (falling)
+            {
+                if (position.Y > game.Window.ClientBounds.Height)
+                    game.LostBall();
+            }
+
             else if (position.Y + height > game.Player.Position.Y)
             {
-                position.Y = game.Player.Position.Y - height;
-                curYSpeed = -curYSpeed;
+                if (position.X + width >= game.Player.Position.X &&
+                    position.X <= game.Player.Position.X + Player.width)
+                {
+                    //The ball hit the player's racket, bounce it back
+                    position.Y = game.Player.Position.Y - height;
+                    curYSpeed = -curYSpeed;
+                }
+                else
+                {
+                    //The player wasnt able to catch the ball, mark the ball as falling
+                    falling = true;
+                }
             }
         }
 
@@ -80,6 +101,7 @@ namespace Arkanoid
         public void Reset(Player player)
         {
             launched = false;
+            falling = false;
             position = player.GetBallStartingPos();
         }
 

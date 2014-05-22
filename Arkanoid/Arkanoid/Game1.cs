@@ -24,14 +24,20 @@ namespace Arkanoid
 
         ControlsManager controls;
 
-        
 
-        Player player;
-        Ball ball;
+
+        public Player Player { get; set; }
+        public Ball Ball { get; set; }
+        HUD hud;
+
+
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 480;
+            graphics.PreferredBackBufferWidth = 320;
+
             Content.RootDirectory = "Content";
         }
 
@@ -43,15 +49,19 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
-            player = new Player(this,
+            Player = new Player(this,
                 (Window.ClientBounds.Width / 2) - (Player.width / 2),
                 (Window.ClientBounds.Height - 50) - (Player.height / 2));
 
-            ball = new Ball(this, player.GetBallStartingPos());
+            Ball = new Ball(this, Player.GetBallStartingPos());
 
             backgroundRectangle = new Rectangle(0, 0,
                 Window.ClientBounds.Width,
                 Window.ClientBounds.Height);
+
+            hud = new HUD(this);
+            hud.Font = Content.Load<SpriteFont>("Arial");
+            hud.Lives = 3; //hardcode
 
             controls = new ControlsManager(this);
             base.Initialize();
@@ -68,8 +78,8 @@ namespace Arkanoid
 
             gameBackground = Content.Load<Texture2D>(@"Images/background");
 
-            player.Sprite = Content.Load<Texture2D>(@"Images/player");
-            ball.Sprite = Content.Load<Texture2D>(@"Images/ball");
+            Player.Sprite = Content.Load<Texture2D>(@"Images/player");
+            Ball.Sprite = Content.Load<Texture2D>(@"Images/ball");
         }
 
         /// <summary>
@@ -89,7 +99,7 @@ namespace Arkanoid
         protected override void Update(GameTime gameTime)
         {
             controls.Update();
-            if (ball.Launched) ball.Move();
+            if (Ball.Launched) Ball.Move();
             base.Update(gameTime);
         }
 
@@ -109,10 +119,11 @@ namespace Arkanoid
 
             //Other stuff
             spriteBatch.Begin();
+            hud.Draw(spriteBatch);
             spriteBatch.Draw(
-                player.Sprite, player.Position, player.Rectangle, Color.White, 
+                Player.Sprite, Player.Position, Player.Rectangle, Color.White, 
                 0, Vector2.Zero, 1, SpriteEffects.None, 0);
-            spriteBatch.Draw(ball.Sprite, ball.Position, Color.White);
+            spriteBatch.Draw(Ball.Sprite, Ball.Position, Color.White);
 
 
             spriteBatch.End();
@@ -120,14 +131,28 @@ namespace Arkanoid
             base.Draw(gameTime);
         }
 
-        public Player Player
+
+        internal void LostBall()
         {
-            get { return player; }
+            hud.Lives--;
+            Ball.Reset(Player);
+            if (hud.Lives <= 0)
+                GameOver();
         }
 
-        public Ball Ball
+        private void GameOver()
         {
-            get { return ball; }
+            throw new NotImplementedException();
         }
+
+        public void LoadDialog()
+        {
+            List<string> MBOPTIONS = new List<string>();
+            MBOPTIONS.Add("OK");
+            string msg = "Text that was typed on the keyboard will be displayed here.\nClick OK to continue...";
+            Guide.BeginShowMessageBox(
+                    "Title", msg, MBOPTIONS, 0,
+                    MessageBoxIcon.Alert, null, null);
+        }//end Load
     }
 }

@@ -16,7 +16,7 @@ namespace Arkanoid
         {
             game = g;
             Mouse.SetPosition(
-                (int) game.Player.Position.X, 
+                (int) game.Player.Position.X,
                 (int) game.Player.Position.Y);
         }
 

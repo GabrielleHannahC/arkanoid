@@ -103,5 +103,10 @@ namespace Arkanoid
             set { sprite = value; }
         }
 
+        public int Lives
+        {
+            get { return lives; }
+            set { lives = value; }
+        }
     }
 }
