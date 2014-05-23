@@ -86,8 +86,6 @@ namespace Arkanoid
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             gameBackground = Content.Load<Texture2D>(@"Images/background");
-            Player.Sprite = Content.Load<Texture2D>(@"Images/player");
-            Ball.Sprite = Content.Load<Texture2D>(@"Images/ball");
         }
 
         /// <summary>
