@@ -10,6 +10,7 @@ namespace Arkanoid
     public class Ball
     {
         const int speed = 4;
+        const String spriteTexture = @"Images/ball"; 
         public const int width = 8;
         public const int height = 8;
 
@@ -31,7 +32,7 @@ namespace Arkanoid
             
             falling = false;
             launched = false;
-
+            Sprite = game.Content.Load<Texture2D>(spriteTexture);
             rectangle = new Rectangle(0, 0,
                 width,
                 height);

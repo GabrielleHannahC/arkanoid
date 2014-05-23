@@ -20,6 +20,7 @@ namespace Arkanoid
         public HUD(Game1 game)
         {
             this.game = game;
+            Font = game.Content.Load<SpriteFont>("Arial");
         }
 
         public void Draw(SpriteBatch spriteBatch)

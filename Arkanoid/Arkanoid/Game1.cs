@@ -66,7 +66,7 @@ namespace Arkanoid
                 Window.ClientBounds.Height);
 
             hud = new HUD(this);
-            hud.Font = Content.Load<SpriteFont>("Arial");
+            
 
             gameManager = new GameManager(this);
             controls = new ControlsManager(this);
@@ -120,10 +120,10 @@ namespace Arkanoid
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             //Draw Background
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Opaque, SamplerState.LinearWrap,
-                DepthStencilState.Default, RasterizerState.CullNone);
-            spriteBatch.Draw(gameBackground, Vector2.Zero, backgroundRectangle, Color.White);
-            spriteBatch.End();
+            //spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Opaque, SamplerState.LinearWrap,
+            //    DepthStencilState.Default, RasterizerState.CullNone);
+            //spriteBatch.Draw(gameBackground, Vector2.Zero, backgroundRectangle, Color.White);
+            //spriteBatch.End();
 
             //Other stuff
             spriteBatch.Begin();

@@ -21,10 +21,12 @@ namespace Arkanoid
         {
             foreach (Cell c in Cells)
             {
-                c.Sprite = game.Content.Load<Texture2D>(@"Images/ball");
             }
         }
 
-
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            //spriteBatch.Draw(Sprite, Position, Color.White);
+        }
     }
 }

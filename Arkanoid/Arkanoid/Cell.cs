@@ -9,17 +9,24 @@ namespace Arkanoid
 {
     class Cell
     {
+        const String spriteTexture = @"Images/cell"; 
 
         public Texture2D Sprite { get; set; }
-        public Rectangle rectangle;
-        Vector2 position;
+        Vector2 Position { get; set; }
 
         Game1 game;
 
         public Cell(Game1 game, Vector2 position)
         {
             this.game = game;
-            this.position = position;
+            this.Position = position;
+
+            Sprite = game.Content.Load<Texture2D>(spriteTexture);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Sprite, Position, Color.White);
         }
     }
 }
