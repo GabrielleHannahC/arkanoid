@@ -62,7 +62,8 @@ namespace Arkanoid
             prevMouseState = mouseState;
             }
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Pressed &&
+                    !game.Ball.Launched)
             {
                 game.Ball.Launch();
             }
