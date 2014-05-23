@@ -31,11 +31,14 @@ namespace Arkanoid
         ControlsManager controls;
 
 
-        public ConfigManager GameManager{ get; set; }
+        public ConfigManager ConfigManager{ get; set; }
         public Rectangle GameArea { get; set; }
         public Player Player { get; set; }
         public Ball Ball { get; set; }
         public CellSet Cells { get; set; }
+
+        enum GameState {Lost, Won, Playing};
+        private GameState curState;
         HUD hud;
 
         public Game1()
@@ -57,13 +60,13 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
-            GameManager = new ConfigManager(this);
+            ConfigManager = new ConfigManager(this);
             GameArea = new Rectangle(0, HUD.height,
                 Window.ClientBounds.Width,
                 Window.ClientBounds.Height - HUD.height);
 
             Player = new Player(this);
-            Player.Lives = GameManager.playerLivesDefault;
+            Player.Lives = ConfigManager.playerLivesDefault;
 
             Ball = new Ball(this, Player.GetBallStartingPos());
 
@@ -75,6 +78,7 @@ namespace Arkanoid
 
             controls = new ControlsManager(this);
             Restart(); //Starts the game with proper configuration
+            curState = GameState.Playing;
 
             base.Initialize();
         }
@@ -111,8 +115,19 @@ namespace Arkanoid
             if (Ball.Launched) Ball.Move();
             
             base.Update(gameTime);
-            if (Player.Lives <= 0)
+
+            //These checks are ordered like this to guarantee
+            // That update is called once before the endgame dialog
+            // window is shown, so that the updated lives and score can be seen
+            if (curState == GameState.Lost)
                 GameOver();
+            if (curState == GameState.Won)
+                Victory();
+
+            if (Cells.CellsAlive <= 0)
+                curState = GameState.Won;
+            if (Player.Lives <= 0)
+                curState = GameState.Lost;
         }
 
         /// <summary>
@@ -155,26 +170,25 @@ namespace Arkanoid
             hud.LoadDialog("Game Over");
         }
 
-
-
-
-
         internal void Restart()
         {
+            curState = GameState.Playing;
             Player.Score = 0;
-            Player.Lives = GameManager.playerLivesDefault;
+            Player.Lives = ConfigManager.playerLivesDefault;
             Player.ResetPosition();
             Ball.Position = Player.GetBallStartingPos();
 
             Cells = new CellSet(
                 this,
-                GameManager.cellRowsDefault,
-                GameManager.cellColsDefault);
+                ConfigManager.cellRowsDefault,
+                ConfigManager.cellColsDefault);
         }
 
         internal void Victory()
         {
             Ball.Launched = false;
+            if (Player.Score > ConfigManager.highscore)
+                ConfigManager.WriteHighScore(Player.Score);
             hud.LoadDialog("Victory!");
         }
     }

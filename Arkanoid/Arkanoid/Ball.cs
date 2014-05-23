@@ -102,11 +102,11 @@ namespace Arkanoid
                     float normalizedDistance = Math.Abs(ballCenter - racketCenter) / (Player.width / 2);
                     
                     if (angle.X < 0)
-                        angle.X = -game.GameManager.playerSpeedDefault * normalizedDistance;
+                        angle.X = -game.ConfigManager.playerSpeedDefault * normalizedDistance;
                     else
-                        angle.X = game.GameManager.playerSpeedDefault* normalizedDistance;
+                        angle.X = game.ConfigManager.playerSpeedDefault* normalizedDistance;
 
-                    angle.Y = (game.GameManager.playerSpeedDefault - normalizedDistance) *-1;
+                    angle.Y = (game.ConfigManager.playerSpeedDefault - normalizedDistance) *-1;
                 }
                 else
                 {

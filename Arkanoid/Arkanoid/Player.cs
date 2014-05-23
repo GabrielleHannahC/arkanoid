@@ -33,7 +33,7 @@ namespace Arkanoid
         {
             this.game = game;
             
-            speed = game.GameManager.playerSpeedDefault;
+            speed = game.ConfigManager.playerSpeedDefault;
             sprite = game.Content.Load<Texture2D>(spriteTexture);
             rectangle = new Rectangle(0, 0,
                 width,

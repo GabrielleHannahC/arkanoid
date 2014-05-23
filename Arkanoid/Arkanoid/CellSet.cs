@@ -15,7 +15,7 @@ namespace Arkanoid
         Vector2 position;
         int rows;
         int cols;
-        int cellsAlive;
+        public int CellsAlive { get; set; }
 
         public CellSet(Game1 game, int rows, int cols)
         {
@@ -23,7 +23,7 @@ namespace Arkanoid
             this.game = game;
             this.rows = rows;
             this.cols = cols;
-            cellsAlive = rows * cols;
+            CellsAlive = rows * cols;
 
             Cells = new Cell[rows][];
             for (int i = 0; i < rows; i++){
@@ -70,10 +70,9 @@ namespace Arkanoid
                                 result = Ball.CollidedSide.TopBottom;
 
                             Cells[i][j] = null;
-                            game.Player.Score += game.GameManager.scorePerCellDefault;
-                            cellsAlive--;
-                            if (cellsAlive <= 0)
-                                game.Victory();
+                            game.Player.Score += game.ConfigManager.scorePerCellDefault;
+                            CellsAlive--;
+
                             return result;
                         }
                     }

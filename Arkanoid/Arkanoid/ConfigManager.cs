@@ -15,6 +15,7 @@ namespace Arkanoid
         public readonly int cellRowsDefault;
         public readonly int cellColsDefault;
         public readonly int scorePerCellDefault;
+        public static int highscore;
 
         Game1 game;
 
@@ -22,13 +23,14 @@ namespace Arkanoid
         {
             this.game = game;
             XmlNode conf = LoadConfig();
+
             playerLivesDefault = Int32.Parse(conf["playerlives"].InnerText);
             playerSpeedDefault = Int32.Parse(conf["playerspeed"].InnerText);
             scorePerCellDefault = Int32.Parse(conf["points_per_cell"].InnerText);
             cellRowsDefault = Int32.Parse(conf["no_of_cell_rows"].InnerText);
             cellColsDefault = Int32.Parse(conf["no_of_cell_cols"].InnerText);
 
-            
+            highscore = Int32.Parse(conf["highscore"].InnerText);
         }
 
         XmlNode LoadConfig()
@@ -42,6 +44,15 @@ namespace Arkanoid
             {
               return null;
             }
+        }
+
+        public void WriteHighScore(int score)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(configPath);
+            doc.SelectSingleNode("/Conf")["highscore"].InnerText = score.ToString();
+            doc.Save(configPath);
+            highscore = score;
         }
     }
 }
