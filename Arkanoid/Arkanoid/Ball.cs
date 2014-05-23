@@ -32,7 +32,7 @@ namespace Arkanoid
             
             falling = false;
             launched = false;
-            Sprite = game.Content.Load<Texture2D>(spriteTexture);
+            sprite = game.Content.Load<Texture2D>(spriteTexture);
 
             collisionRect = new Rectangle(
                 (int) position.X,
@@ -126,7 +126,7 @@ namespace Arkanoid
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Sprite, position, Color.White);
+            spriteBatch.Draw(sprite, position, Color.White);
         }
 
         public void Move()
@@ -175,10 +175,6 @@ namespace Arkanoid
             get { return position; }
             set { position = value; }
         }
-        public Texture2D Sprite
-        {
-            get { return sprite; }
-            set { sprite = value; }
-        }
+
     }
 }

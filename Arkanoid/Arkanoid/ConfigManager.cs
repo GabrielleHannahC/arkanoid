@@ -9,7 +9,7 @@ namespace Arkanoid
 {
     public class ConfigManager
     {
-        const String configPath = @"Content\gameconfig.xml";
+        const String configPath = "gameconfig.xml";
         public readonly int playerLivesDefault;
         public readonly int playerSpeedDefault;
         public readonly int cellRowsDefault;

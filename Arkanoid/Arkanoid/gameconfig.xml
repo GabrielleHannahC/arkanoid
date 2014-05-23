@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Conf>
-  <playerlives>3</playerlives>
+  <playerlives>2</playerlives>
   <playerspeed>5</playerspeed>
   
   <points_per_cell>1</points_per_cell>
