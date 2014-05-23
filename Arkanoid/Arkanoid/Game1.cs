@@ -34,9 +34,8 @@ namespace Arkanoid
         GameManager gameManager;
         public Player Player { get; set; }
         public Ball Ball { get; set; }
+        public CellSet Cells { get; set; }
         HUD hud;
-
-
 
         public Game1()
         {
@@ -57,7 +56,16 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
+            gameManager = new GameManager(this);
+
             Player = new Player(this);
+            Player.Lives = gameManager.playerLivesDefault;
+
+            Cells = new CellSet(
+                this,
+                Vector2.Zero, //Top left corner where to start the cells
+                gameManager.cellRowsDefault,
+                gameManager.cellColsDefault);
 
             Ball = new Ball(this, Player.GetBallStartingPos());
 
@@ -66,11 +74,10 @@ namespace Arkanoid
                 Window.ClientBounds.Height);
 
             hud = new HUD(this);
-            
 
-            gameManager = new GameManager(this);
             controls = new ControlsManager(this);
 
+            gameManager.StartNewGame();
             
 
             base.Initialize();
@@ -127,8 +134,8 @@ namespace Arkanoid
             spriteBatch.Begin();
             hud.Draw(spriteBatch);
             Player.Draw(spriteBatch);
+            Cells.Draw(spriteBatch);
             Ball.Draw(spriteBatch);
-            
 
 
             spriteBatch.End();

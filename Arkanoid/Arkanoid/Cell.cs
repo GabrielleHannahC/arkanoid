@@ -7,12 +7,15 @@ using System.Text;
 
 namespace Arkanoid
 {
-    class Cell
+    public class Cell
     {
-        const String spriteTexture = @"Images/cell"; 
+        const String spriteTexture = @"Images/cells"; 
 
-        public Texture2D Sprite { get; set; }
+        public static Texture2D Sprite { get; set; }
         Vector2 Position { get; set; }
+        Rectangle rectangle;
+        public const int height = 32;
+        public const int width = 64;
 
         Game1 game;
 
@@ -20,13 +23,16 @@ namespace Arkanoid
         {
             this.game = game;
             this.Position = position;
+            rectangle = new Rectangle(0, 0, width, height);
 
             Sprite = game.Content.Load<Texture2D>(spriteTexture);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Sprite, Position, Color.White);
+            spriteBatch.Draw(
+                Sprite, Position, rectangle, Color.White,
+                0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
     }
 }
