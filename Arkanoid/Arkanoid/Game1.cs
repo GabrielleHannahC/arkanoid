@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Windows.Forms;
 
 namespace Arkanoid
 {
@@ -39,6 +40,8 @@ namespace Arkanoid
             graphics.PreferredBackBufferWidth = 320;
 
             Content.RootDirectory = "Content";
+            
+
         }
 
         /// <summary>
@@ -49,6 +52,7 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
+
             Player = new Player(this,
                 (Window.ClientBounds.Width / 2) - (Player.width / 2),
                 (Window.ClientBounds.Height - 50) - (Player.height / 2));
@@ -142,17 +146,9 @@ namespace Arkanoid
 
         private void GameOver()
         {
-            throw new NotImplementedException();
+            hud.LoadDialog();
         }
 
-        public void LoadDialog()
-        {
-            List<string> MBOPTIONS = new List<string>();
-            MBOPTIONS.Add("OK");
-            string msg = "Text that was typed on the keyboard will be displayed here.\nClick OK to continue...";
-            Guide.BeginShowMessageBox(
-                    "Title", msg, MBOPTIONS, 0,
-                    MessageBoxIcon.Alert, null, null);
-        }//end Load
+        
     }
 }

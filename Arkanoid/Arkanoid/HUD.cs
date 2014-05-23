@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Arkanoid
 {
@@ -37,6 +38,25 @@ namespace Arkanoid
                 "LIVES: " + Lives.ToString(),
                 livesPos,
                 Color.White);
+        }
+
+        /** Shows the game over dialog */
+        public void LoadDialog()
+        {
+            DialogResult dialogResult = MessageBox.Show(
+                "Play Again?",
+                "GAME OVER",
+                MessageBoxButtons.YesNo
+                );
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                //do something
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                game.Exit();
+            }
         }
     }
 }
