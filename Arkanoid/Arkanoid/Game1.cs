@@ -31,7 +31,8 @@ namespace Arkanoid
         ControlsManager controls;
 
 
-        GameManager gameManager;
+        public ConfigManager GameManager{ get; set; }
+        public Rectangle GameArea { get; set; }
         public Player Player { get; set; }
         public Ball Ball { get; set; }
         public CellSet Cells { get; set; }
@@ -56,16 +57,13 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
-            gameManager = new GameManager(this);
+            GameManager = new ConfigManager(this);
+            GameArea = new Rectangle(0, HUD.height,
+                Window.ClientBounds.Width,
+                Window.ClientBounds.Height - HUD.height);
 
             Player = new Player(this);
-            Player.Lives = gameManager.playerLivesDefault;
-
-            Cells = new CellSet(
-                this,
-                Vector2.Zero, //Top left corner where to start the cells
-                gameManager.cellRowsDefault,
-                gameManager.cellColsDefault);
+            Player.Lives = GameManager.playerLivesDefault;
 
             Ball = new Ball(this, Player.GetBallStartingPos());
 
@@ -76,9 +74,7 @@ namespace Arkanoid
             hud = new HUD(this);
 
             controls = new ControlsManager(this);
-
-            gameManager.StartNewGame();
-            
+            Restart(); //Starts the game with proper configuration
 
             base.Initialize();
         }
@@ -113,7 +109,10 @@ namespace Arkanoid
         {
             controls.Update();
             if (Ball.Launched) Ball.Move();
+            
             base.Update(gameTime);
+            if (Player.Lives <= 0)
+                GameOver();
         }
 
         /// <summary>
@@ -125,17 +124,17 @@ namespace Arkanoid
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             //Draw Background
-            //spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Opaque, SamplerState.LinearWrap,
-            //    DepthStencilState.Default, RasterizerState.CullNone);
-            //spriteBatch.Draw(gameBackground, Vector2.Zero, backgroundRectangle, Color.White);
-            //spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.Opaque, SamplerState.LinearWrap,
+                DepthStencilState.Default, RasterizerState.CullNone);
+            spriteBatch.Draw(gameBackground, GameArea, backgroundRectangle, Color.White);
+            spriteBatch.End();
 
             //Other stuff
             spriteBatch.Begin();
-            hud.Draw(spriteBatch);
             Player.Draw(spriteBatch);
             Cells.Draw(spriteBatch);
             Ball.Draw(spriteBatch);
+            hud.Draw(spriteBatch);
 
 
             spriteBatch.End();
@@ -148,17 +147,35 @@ namespace Arkanoid
         {
             Player.Lives--;
             Ball.Reset(Player);
-            if (Player.Lives <= 0)
-                GameOver();
+            
         }
 
         private void GameOver()
         {
-            hud.LoadDialog();
+            hud.LoadDialog("Game Over");
         }
 
-        
 
-        
+
+
+
+        internal void Restart()
+        {
+            Player.Score = 0;
+            Player.Lives = GameManager.playerLivesDefault;
+            Player.ResetPosition();
+            Ball.Position = Player.GetBallStartingPos();
+
+            Cells = new CellSet(
+                this,
+                GameManager.cellRowsDefault,
+                GameManager.cellColsDefault);
+        }
+
+        internal void Victory()
+        {
+            Ball.Launched = false;
+            hud.LoadDialog("Victory!");
+        }
     }
 }

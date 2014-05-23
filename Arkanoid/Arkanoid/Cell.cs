@@ -12,18 +12,27 @@ namespace Arkanoid
         const String spriteTexture = @"Images/cells"; 
 
         public static Texture2D Sprite { get; set; }
-        Vector2 Position { get; set; }
+        public Vector2 Position { get; set; }
         Rectangle rectangle;
-        public const int height = 32;
-        public const int width = 64;
+        public const int height = 16;
+        public const int width = 32;
 
+        Rectangle collisionRect;
         Game1 game;
 
-        public Cell(Game1 game, Vector2 position)
+        public Cell(Game1 game, Vector2 position, bool alternateColor)
         {
             this.game = game;
             this.Position = position;
             rectangle = new Rectangle(0, 0, width, height);
+            if (alternateColor)
+                rectangle.Y+=height;
+
+            collisionRect = new Rectangle(
+                (int)position.X,
+                (int)position.Y,
+                width,
+                height);
 
             Sprite = game.Content.Load<Texture2D>(spriteTexture);
         }
@@ -33,6 +42,11 @@ namespace Arkanoid
             spriteBatch.Draw(
                 Sprite, Position, rectangle, Color.White,
                 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+        }
+
+        public Rectangle CollisionRect
+        {
+            get { return collisionRect; }
         }
     }
 }

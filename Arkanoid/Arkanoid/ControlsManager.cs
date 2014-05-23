@@ -34,17 +34,18 @@ namespace Arkanoid
                 //Movement
                 if (keyboardsState.IsKeyDown(Keys.Left))
                 {
-                    game.Player.MoveOnXAxis(-Player.speed);
+                    game.Player.MoveOnXAxis(-game.Player.Speed);
                 }
                 else if (keyboardsState.IsKeyDown(Keys.Right))
-                    game.Player.MoveOnXAxis(Player.speed);
+                    game.Player.MoveOnXAxis(game.Player.Speed);
 
                 Mouse.SetPosition( (int) game.Player.Position.X,
                     (int) game.Player.Position.Y);
 
 
                 //Ball launch
-                if (keyboardsState.IsKeyDown(Keys.Space))
+                if (keyboardsState.IsKeyDown(Keys.Space) &&
+                    !game.Ball.Launched)
                 {
                     game.Ball.Launch();
                 }

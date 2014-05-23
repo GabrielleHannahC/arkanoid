@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Conf>
-  <playerlives>1</playerlives>
-  <score_per_cell>1</score_per_cell>
-  <no_of_cell_rows>3</no_of_cell_rows>
-  <high_score>0</high_score>
-</Conf>

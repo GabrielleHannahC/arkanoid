@@ -12,13 +12,12 @@ namespace Arkanoid
     {
         //These determine which portion of the texture png to load,
         //and thus the general dimensions of the player
-        public const int width = 32;
-        public const int height = 8;
-        public const float speed = 2;
-
+        public const int width = 53;
+        public const int height = 10;
+        private readonly float speed;
         const String spriteTexture = @"Images/player";
 
-        int score = 0;
+        private int score = 0;
         public int Lives {get ; set; }
 
 
@@ -33,6 +32,7 @@ namespace Arkanoid
         public Player(Game1 game)
         {
             this.game = game;
+            speed = game.GameManager.playerSpeedDefault;
             Sprite = game.Content.Load<Texture2D>(spriteTexture);
             rectangle = new Rectangle(0, 0,
                 width,
@@ -120,6 +120,12 @@ namespace Arkanoid
         {
             get { return sprite; }
             set { sprite = value; }
+        }
+
+        public int Score
+        {
+            get { return score; }
+            set { score = value; }
         }
 
     }

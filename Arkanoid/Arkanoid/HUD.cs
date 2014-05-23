@@ -10,6 +10,8 @@ namespace Arkanoid
 {
     public class HUD
     {
+        public const int height = 50;
+
         private Vector2 scorePos = new Vector2(20, 10);
         private Vector2 livesPos = new Vector2(120, 10);
         public SpriteFont Font { get; set; }
@@ -28,7 +30,7 @@ namespace Arkanoid
             // Draw the Score in the top-left of screen
             spriteBatch.DrawString(
                 Font,
-                "Score: " + Score.ToString(),
+                "Score: " + game.Player.Score.ToString(),
                 scorePos,
                 Color.White);
 
@@ -41,17 +43,17 @@ namespace Arkanoid
         }
 
         /** Shows the game over dialog */
-        public void LoadDialog()
+        public void LoadDialog(String Message)
         {
             DialogResult dialogResult = MessageBox.Show(
                 "Play Again?",
-                "GAME OVER",
+                Message,
                 MessageBoxButtons.YesNo
                 );
 
             if (dialogResult == DialogResult.Yes)
             {
-                //do something
+                game.Restart();
             }
             else if (dialogResult == DialogResult.No)
             {

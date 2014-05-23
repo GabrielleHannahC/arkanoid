@@ -13,17 +13,17 @@ namespace Arkanoid
         const String spriteTexture = @"Images/ball"; 
         public const int width = 8;
         public const int height = 8;
-
-        int curXSpeed;
-        int curYSpeed;
+        public enum CollidedSide {TopBottom, LeftRight, None};
 
         Vector2 position;
+        Vector2 angle;
         Game1 game;
 
         private bool launched;
         private bool falling;
         private Texture2D sprite;
         private Rectangle rectangle;
+        Rectangle collisionRect;
 
         public Ball(Game1 game, Vector2 position)
         {
@@ -33,6 +33,13 @@ namespace Arkanoid
             falling = false;
             launched = false;
             Sprite = game.Content.Load<Texture2D>(spriteTexture);
+
+            collisionRect = new Rectangle(
+                (int) position.X,
+                (int) position.Y,
+                width,
+                height);
+
             rectangle = new Rectangle(0, 0,
                 width,
                 height);
@@ -41,8 +48,9 @@ namespace Arkanoid
         public void Launch()
         {
             launched = true;
-            curXSpeed = speed;
-            curYSpeed = -speed; //negative because we launch the ball "up", not down
+            falling = false;
+            angle = new Vector2(speed, -speed);
+
         }
 
         /** checks if we're hitting something, and if so,
@@ -50,55 +58,82 @@ namespace Arkanoid
          * */
         public void CheckCollisions()
         {
-            if (position.X < 0)
+            //Wall (window) bounces
+            if (position.X < game.GameArea.X)
             {
-                position.X = 0;
-                curXSpeed = -curXSpeed;
+                position.X = game.GameArea.X;
+                angle.X = -angle.X;
             }
-            else if (position.X > game.Window.ClientBounds.Width - width)
+            else if (position.X > game.GameArea.Width - width)
             {
-                position.X = game.Window.ClientBounds.Width - width;
-                curXSpeed = -curXSpeed;
+                position.X = game.GameArea.Width - width;
+                angle.X = -angle.X;
+            }
+            if (position.Y < game.GameArea.Y)
+            {
+                position.Y = game.GameArea.Y;
+                angle.Y = -angle.Y;
+            }
+            if (falling && position.Y > game.Window.ClientBounds.Height)
+            {
+                game.LostBall();
+                return;
+            }
+            // Collisions with Cells
+            CollidedSide CellCollision = game.Cells.CollisionWith(this);
+            if (CellCollision != CollidedSide.None)
+            {
+                if (CellCollision == CollidedSide.TopBottom)
+                    angle.Y = -angle.Y;
+                else
+                    angle.X = -angle.X;
             }
 
-            if (position.Y < 0)
+            //Racket collisions
+            else if (position.Y + height > game.Player.Position.Y) //if were on level with the racket
             {
-                position.Y = 0;
-                curYSpeed = -curYSpeed;
-            }
-
-            if (falling)
-            {
-                if (position.Y > game.Window.ClientBounds.Height)
-                    game.LostBall();
-            }
-
-            else if (position.Y + height > game.Player.Position.Y)
-            {
-                if (position.X + width >= game.Player.Position.X &&
-                    position.X <= game.Player.Position.X + Player.width)
+                if (!falling && HitRacket())
                 {
                     //The ball hit the player's racket, bounce it back
                     position.Y = game.Player.Position.Y - height;
-                    curYSpeed = -curYSpeed;
+
+                    float racketCenter = game.Player.Position.X + (Player.width / 2);
+                    float ballCenter = position.X + (width / 2);
+                    float normalizedDistance = Math.Abs(ballCenter - racketCenter) / (Player.width / 2);
+                    
+                    if (angle.X < 0)
+                        angle.X = -game.GameManager.playerSpeedDefault * normalizedDistance;
+                    else
+                        angle.X = game.GameManager.playerSpeedDefault* normalizedDistance;
+
+                    angle.Y = (game.GameManager.playerSpeedDefault - normalizedDistance) *-1;
                 }
                 else
                 {
-                    //The player wasnt able to catch the ball, mark the ball as falling
+                    //The player wasnt able to catch the ball, 
+                    //mark the ball as falling out of bounds
                     falling = true;
                 }
             }
         }
 
+        /** Returns whether the ball has hit the player's racket */
+        private bool HitRacket()
+        {
+            return (position.X + width > game.Player.Position.X && 
+                position.X < game.Player.Position.X + Player.width);
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Sprite, Position, Color.White);
+            spriteBatch.Draw(Sprite, position, Color.White);
         }
 
         public void Move()
         {
-            position.X += curXSpeed;
-            position.Y += curYSpeed;
+            position += angle;
+            collisionRect.X = (int) position.X;
+            collisionRect.Y = (int) position.Y;
             CheckCollisions();
         }
 
@@ -116,13 +151,6 @@ namespace Arkanoid
             position.X += distance;
         }
 
-
-        public Vector2 Position
-        {   
-            get { return position; }
-            set { position = value; }
-        }
-
         public Rectangle Rectangle
         {
             get { return rectangle; }
@@ -132,15 +160,21 @@ namespace Arkanoid
         {
             get { return speed; }
         }
-
-
+        public Rectangle CollisionRect
+        {
+            get { return collisionRect; }
+        }
 
         public Boolean Launched
         {
             get { return launched; }
             set { launched = value; }
         }
-
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
         public Texture2D Sprite
         {
             get { return sprite; }

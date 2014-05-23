@@ -7,34 +7,29 @@ using System.Xml;
 
 namespace Arkanoid
 {
-    class GameManager
+    public class ConfigManager
     {
         const String configPath = @"Content\gameconfig.xml";
         public readonly int playerLivesDefault;
+        public readonly int playerSpeedDefault;
         public readonly int cellRowsDefault;
-        public readonly int cellColsDefault =5; //hardcode
+        public readonly int cellColsDefault;
         public readonly int scorePerCellDefault;
 
         Game1 game;
 
-        public GameManager(Game1 game)
+        public ConfigManager(Game1 game)
         {
             this.game = game;
             XmlNode conf = LoadConfig();
             playerLivesDefault = Int32.Parse(conf["playerlives"].InnerText);
+            playerSpeedDefault = Int32.Parse(conf["playerspeed"].InnerText);
             scorePerCellDefault = Int32.Parse(conf["points_per_cell"].InnerText);
             cellRowsDefault = Int32.Parse(conf["no_of_cell_rows"].InnerText);
+            cellColsDefault = Int32.Parse(conf["no_of_cell_cols"].InnerText);
 
             
         }
-
-
-        public void StartNewGame()
-        {
-            
-            game.Player.ResetPosition();
-        }
-
 
         XmlNode LoadConfig()
         {
@@ -48,14 +43,5 @@ namespace Arkanoid
               return null;
             }
         }
-
-
-
-
-
-
     }
-
-
-
 }

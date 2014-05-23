@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Conf>
-  <playerlives>1</playerlives>
+  <playerlives>3</playerlives>
+  <playerspeed>5</playerspeed>
+  
   <points_per_cell>1</points_per_cell>
   <no_of_cell_rows>3</no_of_cell_rows>
+  <no_of_cell_cols>10</no_of_cell_cols>
+ 
   <high_score>0</high_score>
 </Conf>
