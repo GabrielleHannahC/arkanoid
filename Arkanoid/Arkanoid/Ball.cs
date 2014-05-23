@@ -89,6 +89,11 @@ namespace Arkanoid
             }
         }
 
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Sprite, Position, Color.White);
+        }
+
         public void Move()
         {
             position.X += curXSpeed;

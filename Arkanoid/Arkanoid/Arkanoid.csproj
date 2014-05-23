@@ -74,7 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ball.cs" />
+    <Compile Include="Cell.cs" />
+    <Compile Include="CellSet.cs" />
     <Compile Include="ControlsManager.cs" />
+    <Compile Include="GameManager.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
+    <Content Include="gameconfig.xml" />
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </Content>

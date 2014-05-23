@@ -15,7 +15,6 @@ namespace Arkanoid
         public SpriteFont Font { get; set; }
 
         public int Score { get; set; }
-        public int Lives { get; set; }
         Game1 game;
 
         public HUD(Game1 game)
@@ -35,7 +34,7 @@ namespace Arkanoid
             // Draw Lives
             spriteBatch.DrawString(
                 Font,
-                "LIVES: " + Lives.ToString(),
+                "LIVES: " + game.Player.Lives.ToString(),
                 livesPos,
                 Color.White);
         }

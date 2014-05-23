@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Windows.Forms;
+using System.Xml;
+using System.IO;
+using System.Reflection;
 
 namespace Arkanoid
 {
@@ -17,6 +20,8 @@ namespace Arkanoid
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -26,7 +31,7 @@ namespace Arkanoid
         ControlsManager controls;
 
 
-
+        GameManager gameManager;
         public Player Player { get; set; }
         public Ball Ball { get; set; }
         HUD hud;
@@ -52,10 +57,7 @@ namespace Arkanoid
         /// </summary>
         protected override void Initialize()
         {
-
-            Player = new Player(this,
-                (Window.ClientBounds.Width / 2) - (Player.width / 2),
-                (Window.ClientBounds.Height - 50) - (Player.height / 2));
+            Player = new Player(this);
 
             Ball = new Ball(this, Player.GetBallStartingPos());
 
@@ -65,9 +67,12 @@ namespace Arkanoid
 
             hud = new HUD(this);
             hud.Font = Content.Load<SpriteFont>("Arial");
-            hud.Lives = 3; //hardcode
 
+            gameManager = new GameManager(this);
             controls = new ControlsManager(this);
+
+            
+
             base.Initialize();
         }
 
@@ -81,7 +86,6 @@ namespace Arkanoid
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             gameBackground = Content.Load<Texture2D>(@"Images/background");
-
             Player.Sprite = Content.Load<Texture2D>(@"Images/player");
             Ball.Sprite = Content.Load<Texture2D>(@"Images/ball");
         }
@@ -124,10 +128,9 @@ namespace Arkanoid
             //Other stuff
             spriteBatch.Begin();
             hud.Draw(spriteBatch);
-            spriteBatch.Draw(
-                Player.Sprite, Player.Position, Player.Rectangle, Color.White, 
-                0, Vector2.Zero, 1, SpriteEffects.None, 0);
-            spriteBatch.Draw(Ball.Sprite, Ball.Position, Color.White);
+            Player.Draw(spriteBatch);
+            Ball.Draw(spriteBatch);
+            
 
 
             spriteBatch.End();
@@ -138,9 +141,9 @@ namespace Arkanoid
 
         internal void LostBall()
         {
-            hud.Lives--;
+            Player.Lives--;
             Ball.Reset(Player);
-            if (hud.Lives <= 0)
+            if (Player.Lives <= 0)
                 GameOver();
         }
 
@@ -148,6 +151,8 @@ namespace Arkanoid
         {
             hud.LoadDialog();
         }
+
+        
 
         
     }

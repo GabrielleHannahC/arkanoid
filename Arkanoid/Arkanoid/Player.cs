@@ -17,7 +17,7 @@ namespace Arkanoid
         public const float speed = 2;
 
         int score = 0;
-        int lives = 3;
+        public int Lives {get ; set; }
 
 
         Game1 game;
@@ -28,10 +28,9 @@ namespace Arkanoid
 
         
 
-        public Player(Game1 game, float x, float y)
+        public Player(Game1 game)
         {
             this.game = game;
-            position = new Vector2(x, y);
 
             rectangle = new Rectangle(0, 0,
                 width,
@@ -71,6 +70,24 @@ namespace Arkanoid
                 game.Ball.MoveOnXAxis(distance);
         }
 
+        Vector2 GetDefaultPos()
+        {
+            return new Vector2(
+                (game.Window.ClientBounds.Width / 2) - (width / 2),
+                (game.Window.ClientBounds.Height - 50) - (height / 2));
+        }
+
+        public void ResetPosition()
+        {
+            position = GetDefaultPos();
+        }
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(
+                Sprite, Position, Rectangle, Color.White,
+                0, Vector2.Zero, 1, SpriteEffects.None, 0);
+        }
+
         /** Returns whether or not we're touching a window wall. Also 
          * ensures we dont go through the wall */
         private bool IsOutOfBounds()
@@ -103,10 +120,5 @@ namespace Arkanoid
             set { sprite = value; }
         }
 
-        public int Lives
-        {
-            get { return lives; }
-            set { lives = value; }
-        }
     }
 }
