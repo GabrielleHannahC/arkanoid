@@ -167,6 +167,8 @@ namespace Arkanoid
 
         private void GameOver()
         {
+            if (Player.Score > ConfigManager.highscore)
+                ConfigManager.WriteHighScore(Player.Score);
             hud.LoadDialog("Game Over");
         }
 
