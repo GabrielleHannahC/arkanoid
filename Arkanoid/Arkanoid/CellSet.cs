@@ -19,10 +19,17 @@ namespace Arkanoid
 
         public CellSet(Game1 game, int rows, int cols)
         {
-            position = new Vector2(0, HUD.height + 40); //Top left corner where to start the cells
             this.game = game;
             this.rows = rows;
             this.cols = cols;
+            if (this.cols > 10) this.cols = 10; // Hardcode - ensure we dont add more cols
+                                                // than the current window size
+
+                        //Calculate where to start drawing the cells
+            //so that the cell matrix would be center-aligned.
+            int topLeft = (game.GameArea.Width - (cols * Cell.width)) / 2;
+
+            position = new Vector2(topLeft, HUD.height + 40);
             CellsAlive = rows * cols;
 
             Cells = new Cell[rows][];
